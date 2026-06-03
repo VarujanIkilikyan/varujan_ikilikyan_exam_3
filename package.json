@@ -1,0 +1,13 @@
+{
+  "name": "varujan_ikilikyan_exam_3",
+  "version": "1.0.0",
+  "description": "exam3",
+  "main": "app.js",
+  "repository": "https://github.com/VarujanIkilikyan/varujan_ikilikyan_exam_3.git",
+  "author": "varujan ikilikyan",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

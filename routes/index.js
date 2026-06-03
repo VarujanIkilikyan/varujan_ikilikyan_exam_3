@@ -2,10 +2,10 @@ import {Router} from "express";
 
 import views from "../controllers/views.js";
 import authRoutes from "./auth.js";
-import filmsRoutes from "./filmsRoutes.js";
-import commentsRoutes from "./commentsRoutes.js";
-import bookingsRoutes from "./bookingsRoutes.js";
-import adminRoutes from "./adminRoutes.js";
+import filmsRoutes from "./films.js";
+import commentsRoutes from "./comments.js";
+import bookingsRoutes from "./bookings.js";
+import adminRoutes from "./admin.js";
 
 
 

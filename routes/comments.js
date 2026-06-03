@@ -1,5 +1,5 @@
 import {Router} from "express";
 
-const bookingRoutes = Router();
+const commentsRoutes = Router();
 
-export default bookingRoutes;
+export default commentsRoutes;

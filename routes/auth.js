@@ -17,8 +17,8 @@ authRoutes.get('/login',views.viewRender('login'));
 authRoutes.post('/login',validate(schemas.login,'body'),controller.login);
 authRoutes.get('/logout',controller.logout);
 
-authRoutes.get('/profile',authorization,controller.getUser);
-authRoutes.put('/profile',authorization,validate(schemas.update,'body'),controller.updateUser);
+authRoutes.get('/profile',authorization,controller.profile);
+authRoutes.put('/profile/changePassword',authorization,validate(schemas.changePassword,'body'),controller.changePassword);
 
-authRoutes.get('/list',authorization,validate(schemas.list,'query'),controller.getAllUsers);
+
 export default authRoutes;

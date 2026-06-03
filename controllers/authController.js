@@ -80,17 +80,55 @@ export default {
             next(e);
         }
     },
-    async getUser(req, res, next) {
+    async changePassword(req, res, next) {
         try {
-            const userData = await UsersModel.findByPk(req.session.userId);
+            const userData = await UsersModel.findByPk(req.user.id);
             if (!userData) {
                 throw new HttpErrors(401, 'ошыбка при загрузке профиля')
             }
-            const user = userData.toJSON();
-            delete user.password;
+            const {oldPassword,newPassword} = req.body;
+            userData.getDataValue('password')
+            if (!await bcrypt.compare(oldPassword, userData.getDataValue('password'))){
+                throw new HttpErrors(401, 'wrong password')
+            }
+
+            const Update = await userData.update({password:newPassword})
+            if (!Update) {
+                throw new HttpErrors(401, 'ошыбка при обнавления профиля')
+            }
 
             res.json({
-                message: `профил ползвтеля ${user.userName}`,
+                message: `данные ползвтеля обнавлены`,
+                userData
+            })
+
+        } catch (e) {
+            next(e);
+        }
+    },
+    async logout(req, res, next) {
+        try {
+            res.clearCookie('token', {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict',
+                path: '/'
+            });
+            res.redirect('/users/login');
+
+        } catch (err) {
+            next(err);
+        }
+    },
+    async profile(req, res, next) {
+        try {
+            const user = await UsersModel.findByPk(req.user.id);
+            if (!user) {
+                throw new HttpErrors(401, 'ошыбка при загрузке профиля')
+            }
+
+            res.json({
+                message: `профил ползвтеля ${user.username}`,
                 user
             })
 
@@ -98,85 +136,5 @@ export default {
             next(e);
         }
     },
-    async updateUser(req, res, next) {
-        try {
-            const userData = await UsersModel.findByPk(req.session.userId);
-            if (!userData) {
-                throw new HttpErrors(401, 'ошыбка при загрузке профиля')
-            }
-            const oldData = userData.toJSON();
-            delete oldData.password;
-
-            const Update = await userData.update({...req.body})
-            if (!Update) {
-                throw new HttpErrors(401, 'ошыбка при обнавления профиля')
-            }
-            const newData = Update.toJSON();
-            delete newData.password;
-
-            res.json({
-                message: `данные ползвтеля обнавлены`,
-                oldData,
-                newData
-            })
-
-        } catch (e) {
-            next(e);
-        }
-    },
-    async getAllUsers(req, res, next) {
-        try {
-            const {page, limit} = req.query;
-
-            const pageNum = Math.max(1, parseInt(page) || 1);
-            const limitNum = Math.max(1, parseInt(limit) || 5);
-            const offset = Math.ceil((pageNum - 1) * limit);
-
-            const {count, rows} = await UsersModel.findAndCountAll({
-                limit: limitNum,
-                offset: offset
-            });
-
-            const userList = []
-            rows.map((user) => {
-                const ob = user.toJSON()
-                delete ob.password;
-                userList.push(ob);
-            })
-
-            res.json({
-                message: 'get all users',
-                userList,
-                pagination: {
-                    "currentPage": pageNum,
-                    "totalPages": Math.ceil(count / limit),
-                    "totalUsers": count,
-                    "UsersPerPage": limit,
-                }
-            })
-        } catch (e) {
-            next(e);
-        }
-    },
-
-    async logout(req, res, next) {
-        try {
-            await new Promise((resolve, reject) => {
-                req.session.destroy((err) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
-                });
-            });
-            res.clearCookie('session');
-            res.redirect('/users/login');
-
-        } catch (err) {
-            next(err);
-        }
-    }
-
 }
 

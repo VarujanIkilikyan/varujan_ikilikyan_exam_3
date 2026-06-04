@@ -7,7 +7,7 @@ export default {
             .required(),
 
         password: joi.string()
-            .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+            .pattern(new RegExp('^[a-zA-Z0-9]{6,30}$'))
             .required()
 
     }),
@@ -28,15 +28,15 @@ export default {
             .required(),
 
         password: joi.string()
-            .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+            .pattern(new RegExp('^[a-zA-Z0-9]{6,30}$'))
             .required()
     }),
     changePassword: joi.object({
         oldPassword: joi.string()
-            .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+            .pattern(new RegExp('^[a-zA-Z0-9]{6,30}$'))
             .required(),
         newPassword: joi.string()
-            .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+            .pattern(new RegExp('^[a-zA-Z0-9]{6,30}$'))
             .required(),
 
     }),

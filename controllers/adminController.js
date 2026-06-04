@@ -36,10 +36,10 @@ export default {
            const oldFilmData = movie.toJSON()
 
             const updateData = {};
-            if (title !== undefined || null) updateData.title = title;
-            if (description !== undefined || null) updateData.description = description;
-            if (genre !== undefined || null) updateData.genre = genre;
-            if (duration !== undefined || null) updateData.duration = duration;
+            if (title !== undefined && title !== null) updateData.title = title;
+            if (description !== undefined && description !== null) updateData.description = description;
+            if (genre !== undefined && genre !== null) updateData.genre = genre;
+            if (duration !== undefined && duration !== null) updateData.duration = duration;
 
             await movie.update(updateData)
             await movie.reload();

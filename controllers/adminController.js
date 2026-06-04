@@ -1,5 +1,7 @@
 import HttpErrors from 'http-errors';
-import {FilmsModel} from '../models/Index.model.js';
+import {FilmsModel,ShowtimeModel} from '../models/Index.model.js';
+import {Op}  from 'sequelize'
+import moment from 'moment';
 
 
 export default {
@@ -75,6 +77,48 @@ export default {
 
         }catch (e) {
             next(e);
+        }
+    },
+    async addShowTime(req, res, next) {
+        try {
+            const  id = req.params.id;
+            const {showdate, showtime, price, totalseats } = req.body;
+
+            const film = await FilmsModel.findByPk(id);
+            if (!film) {
+                return res.status(404).json({ message: 'Фильм не найден' });
+            }
+            const startOfDay = moment(showdate).startOf('day').toDate();
+            const endOfDay = moment(showdate).endOf('day').toDate();
+
+            const showtimesCount = await ShowtimeModel.count({
+                where: {
+                    filmid: film.id,
+                    showdate: {
+                        [Op.between]: [startOfDay, endOfDay]
+                    }
+                }
+            });
+
+            if (showtimesCount >= 3) {
+                return res.status(400).json({
+                    message: 'Превышен лимит: для одного фильма нельзя добавить более 3 сеансов в день'
+                });
+            }
+
+
+            const newShowtime = await ShowtimeModel.create({
+                filmid: film.id,
+                showdate,
+                showtime,
+                price,
+                totalseats,
+                availableseats: totalseats
+            });
+
+            res.status(201).json(newShowtime);
+        } catch (err) {
+            next(err);
         }
     }
 

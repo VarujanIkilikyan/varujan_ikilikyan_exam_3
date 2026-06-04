@@ -12,4 +12,6 @@ adminRoutes.post('/films',authorization,isAdmin,validate(schemas.addFilm,'body')
 adminRoutes.put('/films/:id',authorization,isAdmin,validate(schemas.updateFilm,'body'),validate(schemas.validID,'params'),controller.updateFilm);
 adminRoutes.delete('/films/:id',authorization,isAdmin,validate(schemas.validID,'params'),controller.deleteFilm);
 
+adminRoutes.post('/showtime/:id',authorization,isAdmin,validate(schemas.validID,'params'),controller.addShowTime);
+
 export default adminRoutes;

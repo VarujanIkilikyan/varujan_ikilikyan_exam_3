@@ -3,6 +3,7 @@ import HttpErrors from 'http-errors';
 
 const validator = (schema, path = 'body') => (req, res, next) => {
     try {
+
         const v = schema.validate(req[path], { abortEarly: false });
 
         if (v.error) {

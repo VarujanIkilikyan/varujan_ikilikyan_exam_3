@@ -11,12 +11,15 @@
 import DbConnection from "../config/database.js";
 import {Model, DataTypes} from 'sequelize';
 import FilmsModel from "./Films.model.js";
+import BookingModel from "./Booking.model.js";
 
 
 class Showtime  extends Model {
     static associate() {
         this.belongsTo(FilmsModel, { foreignKey: 'filmid', as: 'film' });
         FilmsModel.hasMany(this, { foreignKey: 'filmid', as: 'showtimes' });
+
+        // this.hasMany(BookingModel, { foreignKey: 'showtimeid', as: 'bookings' });
     }
 }
 

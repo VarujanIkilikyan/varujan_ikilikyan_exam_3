@@ -1,8 +1,12 @@
 import DbConnection from "../config/database.js";
 import {Model, DataTypes} from 'sequelize';
 import bcrypt from "bcrypt";
+import BookingModel from "./Booking.model.js";
 
 class Users extends Model {
+    static associate() {
+    // this.hasMany(BookingModel, { foreignKey: 'userid', as: 'bookings' });
+    }
 }
 
 // - id — PK, AUTO_INCREMENT

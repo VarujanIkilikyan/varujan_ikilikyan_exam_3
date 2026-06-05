@@ -1,9 +1,9 @@
-import {UsersModel,FilmsModel,ShowtimeModel} from './models/Index.model.js';
+import {UsersModel,FilmsModel,ShowtimeModel,BookingModel} from './models/Index.model.js';
 
 
     (async () => {
     console.log('Running migration...');
-    const modelsList = [UsersModel,FilmsModel,ShowtimeModel];
+    const modelsList = [UsersModel,FilmsModel,ShowtimeModel,BookingModel];
         for (let model of modelsList){
            await model.sync({alter: true});
             console.log(`model->${ model.name}->synchronized`)
